@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+x_frames/
+y_frames/
+z_frames/
+*.gif
