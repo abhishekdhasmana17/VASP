@@ -1,240 +1,161 @@
-# VASP OUTCAR Trajectory GIF Generator
+# VASP Python Toolkit
+### Python Utilities for VASP Post-Processing, Analysis, and Visualization
 
-A Python utility for visualizing atomic structural evolution recorded in VASP `OUTCAR` files. `allgif.py` reads one or more OUTCAR files, combines their ionic configurations in the supplied chronological order, and creates an animated GIF from the resulting trajectory.
+Welcome to the **VASP Python Toolkit**!
 
-## Features
+This repository is an evolving collection of Python scripts developed to simplify and automate common tasks associated with the Vienna Ab initio Simulation Package (VASP).
 
-- Reads a single OUTCAR or combines multiple sequential OUTCAR files.
-- Removes an identical configuration at the boundary between consecutive files.
-- Checks atom count and chemical-symbol ordering across all configurations.
-- Creates separate frame directories and GIFs for X, Y, and Z viewing directions.
-- Cleans old PNG frames in the selected view directory before rendering.
-- Normalizes rendered frames to consistent pixel dimensions.
-- Allows custom GIF filename and frame duration.
-- Uses Matplotlib's non-interactive `Agg` backend for remote Linux/HPC environments.
+The primary goal of this project is to make VASP post-processing, data extraction, analysis, and visualization more efficient, reproducible, and accessible to researchers working in computational materials science, computational chemistry, and first-principles simulations.
 
-## Repository contents
+I will continuously upload new Python scripts covering different aspects of VASP calculations, from extracting useful information from output files to generating publication-quality plots and visualizing atomic structures.
 
-```text
-vasp-outcar-trajectory-gif/
-├── allgif.py
-├── README.md
-├── requirements.txt
-├── LICENSE
-└── .gitignore
-```
+## Objectives
 
-## Requirements and installation
+VASP calculations generate a substantial amount of computational data across files such as `OUTCAR`, `OSZICAR`, `CONTCAR`, `PROCAR`, `DOSCAR`, `EIGENVAL`, and `vasprun.xml`.
 
-Python 3.8 or newer is recommended. Install dependencies:
+Extracting, organizing, interpreting, and visualizing this information can involve repetitive manual operations.
 
-```bash
-python -m pip install -r requirements.txt
-```
+This repository aims to address these challenges through lightweight and practical Python tools that help researchers:
 
-Or install them directly:
+- Automate repetitive post-processing tasks.
+- Extract relevant physical and chemical properties from VASP output files.
+- Analyze electronic and structural properties.
+- Visualize atomic configurations and structural evolution.
+- Organize and process computational data.
+- Generate figures and datasets for scientific publications.
+- Improve the efficiency and reproducibility of computational workflows.
 
-```bash
-python -m pip install ase numpy matplotlib pillow imageio
-```
+## Repository Contents
 
-On a shared HPC system, install into an appropriate virtual environment or user environment if system-wide installation is unavailable.
+The repository will grow continuously as new scripts and utilities are developed.
 
-## Basic usage
+Scripts will be organized into categories based on their primary applications.
 
-Run the script from the directory containing the script, or provide its path. Supply OUTCAR paths in chronological order.
+| Category | Examples of planned utilities |
+|---|---|
+| Structural analysis | Structural comparison, bond distances, bond angles, coordination environments |
+| Electronic structure | DOS, PDOS, band structures, Fermi-level analysis |
+| Charge analysis | Bader charge extraction and charge-transfer analysis |
+| Vibrational analysis | Phonon and vibrational-frequency data processing |
+| Energy analysis | Total energy extraction, energy comparisons, adsorption energies |
+| Surface and adsorption analysis | Adsorption configurations, binding energies, surface structures |
+| Visualization | Atomic structure visualization, trajectory animations, plotting |
+| Output-file processing | OUTCAR, OSZICAR, DOSCAR, PROCAR and vasprun.xml processing |
+| Workflow automation | File organization, input generation, calculation monitoring and batch processing |
+| Data analysis | Data extraction, comparison, statistical analysis and plotting |
 
-### 1. Single-step / single-OUTCAR calculation
+*The categories above represent the intended scope of the repository; scripts will be added as they become available.*
 
-For a calculation whose trajectory is contained in one OUTCAR:
+## Available Scripts
 
-```bash
-python allgif.py ./OUTCAR
-```
+### 1. VASP OUTCAR Trajectory GIF Generator
 
-This uses the default Z view and creates:
+**Script:** `allgif.py`
 
-```text
-z_frames/
-outcar_z.gif
-```
+A Python utility for combining one or more sequential VASP `OUTCAR` files and generating continuous GIF animations of atomic structural evolution.
 
-### 2. Two-step calculation
+**Features:**
+- Supports single and multiple OUTCAR files.
+- Automatically detects duplicate configurations at consecutive file boundaries.
+- Checks atomic composition and ordering.
+- Generates animations along X, Y, and Z viewing directions.
+- Automatically cleans previous PNG frames in the selected viewing directory.
+- Supports customizable GIF duration and output filenames.
 
-Example directory structure:
-
-```text
-Calculation/
-├── Step_1/
-│   └── OUTCAR
-└── Step_2/
-    └── OUTCAR
-```
-
-Run from `Step_2`:
+**Example:**
 
 ```bash
-python allgif.py ../Step_1/OUTCAR ./OUTCAR
+python allgif.py ../../OUTCAR ../OUTCAR ./OUTCAR
 ```
 
-The two trajectories are concatenated in the order supplied.
+See the script-specific documentation and usage examples for more details.
 
-### 3. Three-step calculation
+## Installation
 
-Example directory structure:
+Most scripts will use commonly available scientific Python libraries.
 
-```text
-Calculation/
-├── Step_1/
-│   └── OUTCAR
-├── Step_2/
-│   └── OUTCAR
-└── Step_3/
-    └── OUTCAR
-```
+Typical dependencies include:
 
-Run from `Step_3`:
+- Python
+- NumPy
+- Matplotlib
+- ASE (Atomic Simulation Environment)
+- SciPy
+- Pandas
+- Pillow
+- ImageIO
+
+Install the dependencies required by an individual script using its corresponding instructions.
+
+Where appropriate, a `requirements.txt` file will be provided.
+
+## General Usage
+
+Clone the repository:
 
 ```bash
-python allgif.py ../../Step_1/OUTCAR ../Step_2/OUTCAR ./OUTCAR
+git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
 ```
 
-### 4. More than three OUTCAR files
-
-Add as many paths as required, keeping them in chronological order:
+Navigate to the repository:
 
 ```bash
-python allgif.py ../../../Step_1/OUTCAR ../../Step_2/OUTCAR ../Step_3/OUTCAR ./OUTCAR
+cd YOUR_REPOSITORY
 ```
 
-## Viewing directions and output organization
-
-The default viewing direction is Z. The script uses a separate frame directory and default GIF name for each view.
-
-| Command | Frame directory | Default GIF |
-|---|---|---|
-| `python allgif.py ./OUTCAR --view x` | `x_frames/` | `outcar_x.gif` |
-| `python allgif.py ./OUTCAR --view y` | `y_frames/` | `outcar_y.gif` |
-| `python allgif.py ./OUTCAR --view z` | `z_frames/` | `outcar_z.gif` |
-| `python allgif.py ./OUTCAR` | `z_frames/` | `outcar_z.gif` |
-
-For the same multi-file trajectory, generate all three views with:
+Run an individual script:
 
 ```bash
-python allgif.py ../../Step_1/OUTCAR ../Step_2/OUTCAR ./OUTCAR --view x
-python allgif.py ../../Step_1/OUTCAR ../Step_2/OUTCAR ./OUTCAR --view y
-python allgif.py ../../Step_1/OUTCAR ../Step_2/OUTCAR ./OUTCAR --view z
+python script_name.py
 ```
 
-Changing the view changes the rendered camera orientation; it does not modify atomic coordinates.
+Each script will include its own usage instructions, required dependencies, input-file requirements, and execution examples.
 
-## Animation speed
+## Intended Users
 
-`--duration` sets the display duration of each GIF frame in seconds. It changes playback speed, not the physical time interval between ionic steps.
+This repository is intended for:
 
-```bash
-# Fast playback
-python allgif.py ./OUTCAR --duration 0.2
+- Researchers using VASP for density functional theory calculations.
+- PhD students and graduate researchers in computational materials science.
+- Computational chemists and physicists.
+- Researchers investigating heterogeneous catalysis, surface chemistry, adsorption, and electronic structures.
+- Anyone interested in automating repetitive VASP post-processing tasks using Python.
 
-# Moderate playback
-python allgif.py ./OUTCAR --duration 0.5
+## Contributions and Suggestions
 
-# Slow playback for inspection
-python allgif.py ./OUTCAR --duration 1.0
-```
+This is a continuously developing project.
 
-The default is `0.5` seconds per frame.
+Suggestions for new scripts, improvements, bug reports, and contributions are welcome.
 
-## Custom output filename
+If you have a repetitive VASP post-processing task that could be automated, feel free to open an issue or submit a feature request.
 
-Use `--output` to override the default GIF filename:
+## Development Philosophy
 
-```bash
-python allgif.py ./OUTCAR --view x --output relaxation_x.gif
-```
+The focus of this repository is on practical, readable, and reusable scripts that address real challenges encountered during VASP calculations.
 
-The frame directory remains `x_frames/`; only the GIF filename changes.
+Whenever possible, scripts will include:
 
-## Combined command examples
+- Clear input and output specifications.
+- Simple command-line execution.
+- Comments explaining important operations.
+- Error handling and input validation.
+- Reproducible processing workflows.
+- Examples demonstrating practical applications.
 
-```bash
-# Three OUTCAR files, X view, fast playback
-python allgif.py ../../Step_1/OUTCAR ../Step_2/OUTCAR ./OUTCAR --view x --duration 0.3
+## Disclaimer
 
-# Two OUTCAR files, Y view, slow playback
-python allgif.py ../Step_1/OUTCAR ./OUTCAR --view y --duration 1.0
+These scripts are provided as research utilities and are intended to assist with computational workflows.
 
-# Three OUTCAR files, Z view, custom GIF name
-python allgif.py ../../Step_1/OUTCAR ../Step_2/OUTCAR ./OUTCAR --view z --output final_relaxation.gif
+Users are responsible for checking the validity of extracted data, computational settings, and scientific interpretations before using the results in research publications.
 
-# Show command-line help
-python allgif.py --help
-```
-
-## Command-line reference
-
-| Argument | Required? | Description | Default |
-|---|---:|---|---|
-| `outcars` | Yes | One or more OUTCAR paths, in chronological order | None |
-| `--view {x,y,z}` | No | Viewing direction | `z` |
-| `--output OUTPUT` | No | Custom output GIF filename | `outcar_<view>.gif` |
-| `--duration SECONDS` | No | Duration per frame in seconds; must be positive | `0.5` |
-| `-h`, `--help` | No | Display help | — |
-
-## Frame cleanup behavior
-
-Before rendering, the script removes existing `.png` files directly inside the selected view directory:
-
-- `--view x` cleans PNG files in `x_frames/`.
-- `--view y` cleans PNG files in `y_frames/`.
-- `--view z`, or no `--view` argument, cleans PNG files in `z_frames/`.
-
-Other view directories, non-PNG files, and subdirectories are preserved. The script does not delete an existing GIF before writing the new GIF.
-
-## Scientific and technical considerations
-
-1. **Chronological ordering:** The script does not infer calculation order. Supply the earliest OUTCAR first and the latest OUTCAR last.
-2. **Structural compatibility:** All configurations must have the same atom count and chemical-symbol ordering. This is a consistency check, not a complete validation of the physical continuity of the calculations.
-3. **Boundary duplicate removal:** Only the first configuration of a file is compared with the final configuration already collected from the preceding file. A frame is removed only if atom ordering, positions, and cell match within the specified numerical tolerance.
-4. **No interpolation:** The script concatenates configurations recorded in OUTCAR files. It does not reconstruct missing ionic steps or interpolate between structures.
-5. **Trajectory interpretation:** For geometry optimization, the animation shows the sequence of ionic relaxation configurations. It should not be described as molecular dynamics unless the underlying VASP calculation was an MD calculation.
-6. **Rendering cost:** High-resolution rendering (2100 × 1800 pixels, 300 DPI) can require substantial CPU time and storage for long trajectories.
-
-## Troubleshooting
-
-**`ModuleNotFoundError`**
-
-Install the missing package in the Python environment used to execute the script:
-
-```bash
-python -m pip install -r requirements.txt
-```
-
-**No OUTCAR file found**
-
-Check the relative paths and current working directory. For example:
-
-```bash
-pwd
-ls -l ../OUTCAR
-```
-
-**Atomic composition or ordering mismatch**
-
-Confirm that the OUTCAR files belong to the same system and use the same POSCAR/POTCAR atom ordering. Do not concatenate trajectories with different atom counts or atom orderings.
-
-**GIF frames have inconsistent dimensions**
-
-The script normalizes every rendered image to the same target pixel dimensions before GIF assembly.
+The scripts do not replace the need for appropriate convergence testing, physical validation, or careful interpretation of DFT results.
 
 ## License
 
-This project is distributed under the MIT License. See [LICENSE](LICENSE).
-
-## Contributions
-
-Bug reports, suggestions, and pull requests are welcome.
+This repository is distributed under the MIT License unless otherwise specified for an individual component.
 
 ---
 
-A lightweight visualization utility for researchers using VASP, ASE, and atomistic simulations.
+**A growing collection of Python tools to make VASP post-processing, analysis, and visualization easier.**
+
+*More scripts and utilities will be added over time.*
