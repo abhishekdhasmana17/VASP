@@ -16,11 +16,10 @@ A Python utility for visualizing atomic structural evolution recorded in VASP `O
 ## Repository contents
 
 ```text
-vasp-outcar-trajectory-gif/
+OUTCAR trajectory animator/
 ├── allgif.py
 ├── README.md
 ├── requirements.txt
-├── LICENSE
 └── .gitignore
 ```
 
@@ -35,7 +34,7 @@ python -m pip install -r requirements.txt
 Or install them directly:
 
 ```bash
-python -m pip install ase numpy matplotlib pillow imageio
+python -m pip install ase numpy matplotlib pillow "imageio>=2.28"
 ```
 
 On a shared HPC system, install into an appropriate virtual environment or user environment if system-wide installation is unavailable.
@@ -229,7 +228,7 @@ The script normalizes every rendered image to the same target pixel dimensions b
 
 ## License
 
-This project is distributed under the MIT License. See [LICENSE](LICENSE).
+This project is distributed under the MIT License. See [LICENSE](../LICENSE).
 
 ## Contributions
 
