@@ -272,10 +272,12 @@ def main():
 
     # 4. Assemble the GIF.
     print("\nCreating GIF...\n")
+    # imageio >= 2.28 (Pillow plugin) expects GIF frame duration in
+    # milliseconds; passing seconds would give a ~0 ms delay.
     imageio.mimsave(
         output_gif,
         gif_frames,
-        duration=args.duration,
+        duration=int(round(args.duration * 1000)),
         loop=0
     )
 

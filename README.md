@@ -50,7 +50,7 @@ Scripts will be organized into categories based on their primary applications.
 
 ### 1. VASP OUTCAR Trajectory GIF Generator
 
-**Script:** `allgif.py`
+**Script:** [`OUTCAR trajectory animator/allgif.py`](OUTCAR%20trajectory%20animator/allgif.py)
 
 A Python utility for combining one or more sequential VASP `OUTCAR` files and generating continuous GIF animations of atomic structural evolution.
 
@@ -58,17 +58,17 @@ A Python utility for combining one or more sequential VASP `OUTCAR` files and ge
 - Supports single and multiple OUTCAR files.
 - Automatically detects duplicate configurations at consecutive file boundaries.
 - Checks atomic composition and ordering.
-- Generates animations along X, Y, and Z viewing directions.
+- Renders along the X, Y, or Z viewing direction (`--view`).
 - Automatically cleans previous PNG frames in the selected viewing directory.
 - Supports customizable GIF duration and output filenames.
 
 **Example:**
 
 ```bash
-python allgif.py ../../OUTCAR ../OUTCAR ./OUTCAR
+python "OUTCAR trajectory animator/allgif.py" ../../OUTCAR ../OUTCAR ./OUTCAR --view z --duration 0.5
 ```
 
-See the script-specific documentation and usage examples for more details.
+See the [script README](OUTCAR%20trajectory%20animator/README.md) for all options and examples.
 
 ## Installation
 
@@ -87,20 +87,24 @@ Typical dependencies include:
 
 Install the dependencies required by an individual script using its corresponding instructions.
 
-Where appropriate, a `requirements.txt` file will be provided.
+To install everything used so far:
+
+```bash
+pip install -r requirements.txt
+```
 
 ## General Usage
 
 Clone the repository:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
+git clone https://github.com/abhishekdhasmana17/VASP.git
 ```
 
 Navigate to the repository:
 
 ```bash
-cd YOUR_REPOSITORY
+cd VASP
 ```
 
 Run an individual script:
@@ -152,7 +156,7 @@ The scripts do not replace the need for appropriate convergence testing, physica
 
 ## License
 
-This repository is distributed under the MIT License unless otherwise specified for an individual component.
+This repository is distributed under the [MIT License](LICENSE) unless otherwise specified for an individual component.
 
 ---
 
